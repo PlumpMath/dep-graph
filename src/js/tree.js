@@ -2,6 +2,8 @@ goog.provide('tree');
 
 goog.require('cljsjs.d3');
 
+// http://bl.ocks.org/mbostock/1138500
+
 tree.config = {w: 960, h: 600, r: 6, fill: d3.scale.category20()};
 
 tree.force = d3.layout.force()
