@@ -2,12 +2,7 @@ goog.provide('tree');
 
 goog.require('cljsjs.d3');
 
-var w = 960,
-    h = 500,
-    r = 6,
-    fill = d3.scale.category20();
-
-tree.config = {w: 960, h: 500, r: 6, fill: d3.scale.category20()};
+tree.config = {w: 960, h: 600, r: 6, fill: d3.scale.category20()};
 
 tree.force = d3.layout.force()
     .charge(-120)
@@ -31,9 +26,9 @@ tree.drawTree = function(json) {
       .style("stroke", function(d) {
           return d3.rgb(tree.config.fill(d.group)).darker();
       })
-      .call(force.drag);
+      .call(tree.force.drag);
 
-  force
+  tree.force
       .nodes(json.nodes)
       .links(json.links)
       .on("tick", tick)

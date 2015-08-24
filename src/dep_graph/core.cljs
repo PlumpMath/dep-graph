@@ -19,6 +19,7 @@
     (reify
       om/IRender
       (render [_]
+        
         (dom/div nil
           (.json d3 "dependency.json"
             (fn [e d]
