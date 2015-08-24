@@ -1,6 +1,8 @@
 (ns ^:figwheel-always dep-graph.core
-    (:require[om.core :as om :include-macros true]
-              [om.dom :as dom :include-macros true]))
+    (:require [om.core :as om :include-macros true]
+              [om.dom :as dom :include-macros true]
+              [tree]
+              cljsjs.d3))
 
 (enable-console-print!)
 
@@ -10,11 +12,20 @@
 
 (defonce app-state (atom {:text "Hello world!"}))
 
+(def d3 (.-d3 js/window))
+
 (om/root
   (fn [data owner]
-    (reify om/IRender
+    (reify
+      om/IRender
       (render [_]
-        (dom/h1 nil (:text data)))))
+        (dom/div nil
+          (.json d3 "dependency.json"
+            (fn [e d]
+              (.log js/console d)))))
+      om/IDidMount
+      (did-mount [_]
+        (.json d3 "dependency.json" tree/drawTree))))
   app-state
   {:target (. js/document (getElementById "app"))})
 

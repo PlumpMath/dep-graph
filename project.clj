@@ -25,6 +25,7 @@
              :figwheel { :on-jsload "dep-graph.core/on-js-reload" }
 
              :compiler {:main dep-graph.core
+                        :libs ["src/js/tree.js"]
                         :asset-path "js/compiled/out"
                         :output-to "resources/public/js/compiled/dep_graph.js"
                         :output-dir "resources/public/js/compiled/out"
