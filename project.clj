@@ -22,9 +22,10 @@
   {:builds [{:id "dev"
              :source-paths ["src"]
 
-             :figwheel { :on-jsload "dep-graph.core/on-js-reload" }
+             :figwheel true 
 
-             :compiler {:main dep-graph.core
+             :compiler {
+                        :main tree 
                         :libs ["src/js/tree.js"]
                         :asset-path "js/compiled/out"
                         :output-to "resources/public/js/compiled/dep_graph.js"
