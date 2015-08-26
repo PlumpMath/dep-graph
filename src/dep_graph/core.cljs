@@ -14,6 +14,7 @@
 
 (def d3 (.-d3 js/window))
 
+(.log js/console dep-graph.example/config)
 (om/root
   (fn [data owner]
     (reify
