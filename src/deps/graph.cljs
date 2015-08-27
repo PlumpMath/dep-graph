@@ -1,7 +1,7 @@
-(ns ^:figwheel-always dep-graph.core
+(ns ^:figwheel-always deps.graph
     (:require [om.core :as om :include-macros true]
               [om.dom :as dom :include-macros true]
-              [tree]
+              [deps.tree :as tree]
               cljsjs.d3))
 
 (enable-console-print!)
@@ -14,23 +14,19 @@
 
 (def d3 (.-d3 js/window))
 
-(.log js/console dep-graph.example/config)
 (om/root
   (fn [data owner]
     (reify
       om/IRender
       (render [_]
-        
         (dom/div nil
-          (.json d3 "dependency.json"
-            (fn [e d]
-              (.log js/console d)))))
+          (dom/svg #js {:id "graph"})))
       om/IDidMount
       (did-mount [_]
-        (.json d3 "dependency.json" tree/drawTree))))
+        (.json d3 "dependency.json" (fn [json]
+                                      (tree/drawTree "#graph" json))))))
   app-state
   {:target (. js/document (getElementById "app"))})
-
 
 (defn on-js-reload []
   ;; optionally touch your app-state to force rerendering depending on

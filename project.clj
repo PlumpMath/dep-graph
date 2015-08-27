@@ -1,4 +1,4 @@
-(defproject dep-graph "0.1.0-SNAPSHOT"
+(defproject deps "0.1.0-SNAPSHOT"
   :description "FIXME: write this!"
   :url "http://example.com/FIXME"
   :license {:name "Eclipse Public License"
@@ -24,8 +24,7 @@
 
              :figwheel true 
 
-             :compiler {:main dep-graph.core 
-                        :libs ["src/js/tree.js"]
+             :compiler {:main deps.graph
                         :asset-path "js/compiled/out"
                         :output-to "resources/public/js/compiled/dep_graph.js"
                         :output-dir "resources/public/js/compiled/out"
@@ -33,7 +32,7 @@
             {:id "min"
              :source-paths ["src"]
              :compiler {:output-to "resources/public/js/compiled/dep_graph.js"
-                        :main dep-graph.core
+                        :main deps.graph
                         :optimizations :advanced
                         :pretty-print false}}]}
 
