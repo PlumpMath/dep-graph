@@ -1,37 +1,36 @@
-goog.provide('tree');
+goog.provide('js.tree');
 
 goog.require('cljsjs.d3');
 
 // http://bl.ocks.org/mbostock/1138500
 
+js.tree.config = {w: 960, h: 600, r: 6, fill: d3.scale.category20()};
 
-tree.config = {w: 960, h: 600, r: 6, fill: d3.scale.category20()};
-
-tree.force = d3.layout.force()
+js.tree.force = d3.layout.force()
     .charge(-120)
     .linkDistance(30)
-    .size([tree.config.w, tree.config.h]);
+    .size([js.tree.config.w, js.tree.config.h]);
 
-tree.svg = d3.select("body").append("svg:svg")
-    .attr("width", tree.config.w)
-    .attr("height", tree.config.h);
+js.tree.svg = d3.select("body").append("svg:svg")
+    .attr("width", js.tree.config.w)
+    .attr("height", js.tree.config.h);
 
-tree.drawTree = function(json) {
-  var link = tree.svg.selectAll("line")
+js.tree.drawJs.Tree = function(json) {
+  var link = js.tree.svg.selectAll("line")
       .data(json.links)
       .enter().append("svg:line");
 
-  var node = tree.svg.selectAll("circle")
+  var node = js.tree.svg.selectAll("circle")
       .data(json.nodes)
     .enter().append("svg:circle")
-      .attr("r", tree.config.r - .75)
-      .style("fill", function(d) { return tree.config.fill(d.group); })
+      .attr("r", js.tree.config.r - .75)
+      .style("fill", function(d) { return js.tree.config.fill(d.group); })
       .style("stroke", function(d) {
-          return d3.rgb(tree.config.fill(d.group)).darker();
+          return d3.rgb(js.tree.config.fill(d.group)).darker();
       })
-      .call(tree.force.drag);
+      .call(js.tree.force.drag);
 
-  tree.force
+  js.tree.force
       .nodes(json.nodes)
       .links(json.links)
       .on("tick", tick)
@@ -39,7 +38,7 @@ tree.drawTree = function(json) {
 
   function tick(e) {
 
-    // Push sources up and targets down to form a weak tree.
+    // Push sources up and targets down to form a weak js.tree.
     var k = 6 * e.alpha;
     json.links.forEach(function(d, i) {
       d.source.y -= k;

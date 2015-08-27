@@ -24,8 +24,7 @@
 
              :figwheel true 
 
-             :compiler {
-                        :main tree 
+             :compiler {:main dep-graph.core 
                         :libs ["src/js/tree.js"]
                         :asset-path "js/compiled/out"
                         :output-to "resources/public/js/compiled/dep_graph.js"
