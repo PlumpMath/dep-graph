@@ -4,7 +4,7 @@ goog.require('cljsjs.d3');
 
 // http://bl.ocks.org/mbostock/1138500
 
-deps.tree.config = {w: 960, h: 600, rx: 60, ry: 20, fill: d3.scale.category20()};
+deps.tree.config = {w: 1600, h: 900, rx: 60, ry: 20, fill: d3.scale.category20()};
 
 deps.tree.force = d3.layout.force()
     .charge(-900)
@@ -24,7 +24,7 @@ deps.tree.formatNs = function(s) {
 deps.tree.drawTree = function(nodeId, json) {
   var root = deps.tree.svg(nodeId);
   var link = root.selectAll("line")
-      .data(json.links)
+      .data(json.edges)
       .enter().append("svg:line");
 
   var node = root.selectAll("g").data(json.nodes);
@@ -47,7 +47,7 @@ deps.tree.drawTree = function(nodeId, json) {
     	.attr("text-anchor", "middle");
   deps.tree.force
       .nodes(json.nodes)
-      .links(json.links)
+      .links(json.edges)
       .on("tick", tick)
       .start();
 
@@ -55,7 +55,7 @@ deps.tree.drawTree = function(nodeId, json) {
 
     // Push sources up and targets down to form a weak deps.tree.
     var k = 6 * e.alpha;
-    json.links.forEach(function(d, i) {
+    json.edges.forEach(function(d, i) {
       d.source.y -= k;
       d.target.y += k;
     });
