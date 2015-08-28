@@ -4,7 +4,7 @@ goog.require('cljsjs.d3');
 
 // http://bl.ocks.org/mbostock/1138500
 
-deps.tree.config = {w: 1600, h: 900, rx: 60, ry: 20, fill: d3.scale.category20()};
+deps.tree.config = {w: 1600, h: 1200, rx: 60, ry: 20, fill: d3.scale.category20()};
 
 deps.tree.force = d3.layout.force()
     .charge(-900)

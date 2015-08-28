@@ -26,11 +26,12 @@
         edges (->> nodes
                 (mapcat #(->> (filter part-of-project?
                                 (ns-dep/immediate-dependencies dep-graph %))
-                           (map (partial vector %)))))]
-    {:edges edges :nodes nodes})
-  #_(clojure.pprint/pprint {:edges edges :nodes nodes} )
-  #_(with-open [^java.io.Writer w (io/writer  (io/file json-file))]
-      (json/write {:edges edges :nodes nodes} w))
-  #_(sh "dot" "-Tsvg" (str "-o" svgfile ) dotfile) )
-
-
+                           (map (partial vector %)))))
+        idx (into {} (map-indexed (fn [i n] [n i]) nodes))
+        json-nodes (mapv (fn [[n i]] {:name (str n)}) (sort-by second idx))
+        json-edges (->> edges 
+                     (map (fn [[from to]]
+                            {:source (get idx from) :target (get idx to)})))]
+    {:edges json-edges :nodes json-nodes}
+    (with-open [^java.io.Writer w (io/writer (io/file json-file))]
+      (json/write {:edges json-edges :nodes json-nodes} w))))
