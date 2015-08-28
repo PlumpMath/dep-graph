@@ -4,7 +4,7 @@ goog.require('cljsjs.d3');
 
 // http://bl.ocks.org/mbostock/1138500
 
-deps.tree.config = {w: 960, h: 600, r: 50, fill: d3.scale.category20()};
+deps.tree.config = {w: 960, h: 600, rx: 60, ry: 20, fill: d3.scale.category20()};
 
 deps.tree.force = d3.layout.force()
     .charge(-900)
@@ -31,8 +31,9 @@ deps.tree.drawTree = function(nodeId, json) {
 
   var box = node.enter().append("g");
 
-  var circle = box.append("svg:circle")
-      .attr("r", deps.tree.config.r - .75)
+  var circle = box.append("svg:ellipse")
+      .attr("rx", deps.tree.config.rx - .75)
+      .attr("ry", deps.tree.config.ry)
       .style("fill", function(d) { return deps.tree.config.fill(d.group); })
       .style("stroke", function(d) {
           return d3.rgb(deps.tree.config.fill(d.group)).darker();

@@ -1,0 +1,12 @@
+digraph simple_hierarchy {
+ graph [rankdir = "LR"];
+ deps_deps->clojure_java_shell;
+ subgraph cluster_clojure {
+label="clojure";
+color=blue;
+clojure_java_shell[label="clojure.java.shell"];
+deps_deps[label="deps.deps"];
+} subgraph cluster_java {
+label="java";
+color=red;
+}}

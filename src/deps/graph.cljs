@@ -23,7 +23,7 @@
           (dom/svg #js {:id "graph"})))
       om/IDidMount
       (did-mount [_]
-        (.json d3 "dependency.json" (fn [json]
+        (.json d3 "Komunike.json" (fn [json]
                                       (tree/drawTree "#graph" json))))))
   app-state
   {:target (. js/document (getElementById "app"))})
