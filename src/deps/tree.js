@@ -34,7 +34,10 @@ deps.tree.drawTree = function(nodeId, json) {
   var circle = box.append("svg:ellipse")
       .attr("rx", deps.tree.config.rx - .75)
       .attr("ry", deps.tree.config.ry)
-      .style("fill", function(d) { return deps.tree.config.fill(d.group); })
+      .style("fill", function(d) { 
+          var groupName = d.name.split(".")[0];
+          return deps.tree.config.fill(groupName);
+      })
       .style("stroke", function(d) {
           return d3.rgb(deps.tree.config.fill(d.group)).darker();
       })
