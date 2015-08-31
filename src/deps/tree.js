@@ -44,11 +44,20 @@ deps.tree.drawTree = function(nodeId, json) {
   console.log();
   var g = deps.tree.Graph(json);
   var root = deps.tree.svg(nodeId);
+  var inner = root.select("g");
+  var zoom = d3.behavior.zoom().on("zoom", function() {
+      inner.attr("transform", "translate(" + d3.event.translate + ")" +
+                             "scale(" + d3.event.scale + ")");
+  });
+  root.call(zoom);
   var render = new dagreD3.render();
-  console.log(render);
-  console.log(g);
-  render(root, g);
+  render(inner, g);
 
+  var initialScale = 0.75;
+  zoom.translate([(root.attr("width") - g.graph().width * initialScale) / 2, 20])
+      .scale(initialScale)
+      .event(root);
+  root.attr("height", g.graph().height * initialScale + 40);
   // var link = root.selectAll("line")
   //     .data(json.edges)
   //     .enter().append("svg:line");

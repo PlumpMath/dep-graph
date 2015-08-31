@@ -20,7 +20,8 @@
       om/IRender
       (render [_]
         (dom/div nil
-          (dom/svg #js {:id "graph"})))
+          (dom/svg #js {:id "graph"}
+            (dom/g #js {}))))
       om/IDidMount
       (did-mount [_]
         (.json d3 "Komunike.json" (fn [json]
