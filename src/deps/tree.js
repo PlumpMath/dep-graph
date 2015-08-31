@@ -23,11 +23,28 @@ deps.tree.formatNs = function(s) {
     return s.split(".").join("\n");
 };
 
+deps.tree.colors = ["green", "red", "yellow", "orange", "blue", "chocolate"];
+
+deps.tree.nodeToGroup = function(name) {
+    return name.split("\.")[0];
+};
+
 deps.tree.Graph = function(json) {
    var g = new dagreD3.graphlib.Graph().setGraph({}); 
+   var allColors = deps.tree.colors;
+   var nodeColors = {};
    json.nodes.forEach(function(node) {
+      var group = deps.tree.nodeToGroup(node.name);
+      var color;
+      if (typeof nodeColors[group] !== "undefined") {
+        color = nodeColors[group];
+      } else {
+        color = allColors[allColors.length - 1];
+        nodeColors[group] = color;
+        allColors.pop();
+      }
        g.setNode(node.name, {label: node.name});
-       g.node(node.name).style = "fill:white;stroke:black";
+       g.node(node.name).style = "fill:" + color + ";stroke:black";
    });
    json.edges.forEach(function(edge) {
        g.setEdge(edge.source, edge.target,{});
@@ -41,7 +58,6 @@ deps.tree.Graph = function(json) {
 };
 
 deps.tree.drawTree = function(nodeId, json) {
-  console.log();
   var g = deps.tree.Graph(json);
   var root = deps.tree.svg(nodeId);
   var inner = root.select("g");
