@@ -46,7 +46,6 @@
         json-nodes (mapv (fn [[n i]] {:name (str n)}) (sort-by second idx))
         json-edges (->> edges 
                      (map (fn [[from to]]
-                            {:source (get idx from) :target (get idx to)})))]
-    colors
-    #_(with-open [^java.io.Writer w (io/writer (io/file json-file))]
-        (json/write {:edges json-edges :nodes json-nodes} w))))
+                            {:source from :target to})))]
+    (with-open [^java.io.Writer w (io/writer (io/file json-file))]
+      (json/write {:edges json-edges :nodes json-nodes} w))))

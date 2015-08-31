@@ -5,3 +5,7 @@ circle {
 line {
   stroke: #999;
 }
+
+.edgePath {
+  stroke: black;
+}
