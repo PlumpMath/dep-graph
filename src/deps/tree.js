@@ -23,7 +23,7 @@ deps.tree.formatNs = function(s) {
     return s.split(".").join("\n");
 };
 
-deps.tree.colors = ["green", "red", "yellow", "orange", "blue", "chocolate"];
+deps.tree.colors = palette('tol',12); 
 
 deps.tree.nodeToGroup = function(name) {
     return name.split("\.")[0];
@@ -44,7 +44,7 @@ deps.tree.Graph = function(json) {
         allColors.pop();
       }
        g.setNode(node.name, {label: node.name});
-       g.node(node.name).style = "fill:" + color + ";stroke:black";
+       g.node(node.name).style = "fill:#" + color + ";stroke:black";
    });
    json.edges.forEach(function(edge) {
        g.setEdge(edge.source, edge.target,{});
