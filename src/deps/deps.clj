@@ -50,3 +50,8 @@
     (with-open [^java.io.Writer w (io/writer json-file)]
       (json/write {:edges json-edges :nodes json-nodes} w))
     json-file))
+
+(comment
+  (def project {:source-paths ["/home/carlos/Komunike/login/src"]
+                :name "Komunike"
+                :deps {:to "resources/public"}}))

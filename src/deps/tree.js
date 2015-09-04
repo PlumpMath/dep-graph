@@ -29,36 +29,49 @@ deps.tree.nodeToGroup = function(name) {
     return name.split("\.")[0];
 };
 
-deps.tree.Graph = function(json) {
+deps.tree.Graph = function(removeNs, json) {
+   var shouldKeep = function (name) {
+       var keep = true;
+       removeNs.forEach(function(ns) {
+           if (name.startsWith(ns)) {
+               keep = false;
+           };
+       });
+       return keep;
+   };
    var g = new dagreD3.graphlib.Graph().setGraph({}); 
-   var allColors = deps.tree.colors;
+   var allColors = deps.tree.colors.slice(0);
    var nodeColors = {};
    json.nodes.forEach(function(node) {
-      var group = deps.tree.nodeToGroup(node.name);
-      var color;
-      if (typeof nodeColors[group] !== "undefined") {
-        color = nodeColors[group];
-      } else {
-        color = allColors[allColors.length - 1];
-        nodeColors[group] = color;
-        allColors.pop();
-      }
-       g.setNode(node.name, {label: node.name});
-       g.node(node.name).style = "fill:#" + color + ";stroke:black";
+      if (shouldKeep(node.name)) {
+          var group = deps.tree.nodeToGroup(node.name);
+          var color;
+          if (typeof nodeColors[group] !== "undefined") {
+              color = nodeColors[group];
+          } else {
+              color = allColors[allColors.length - 1];
+              nodeColors[group] = color;
+              allColors.pop();
+          }
+          g.setNode(node.name, {label: node.name});
+          g.node(node.name).style = "fill:#" + color + ";stroke:black";
+      };
    });
    json.edges.forEach(function(edge) {
-       g.setEdge(edge.source, edge.target,{});
+      if (shouldKeep(edge.source) && shouldKeep(edge.target)) {
+        g.setEdge(edge.source, edge.target,{});
+      };
    });
    g.nodes().forEach(function(v) {
-       var node = g.node(v);
-       node.rx = deps.tree.config.rx;
-       node.ry = deps.tree.config.ry;
+      var node = g.node(v);
+      node.rx = deps.tree.config.rx;
+      node.ry = deps.tree.config.ry;
    });
    return g;
 };
 
-deps.tree.drawTree = function(nodeId, json) {
-  var g = deps.tree.Graph(json);
+deps.tree.drawTree = function(nodeId, removeNs, json) {
+  var g = deps.tree.Graph(removeNs, json);
   var root = deps.tree.svg(nodeId);
   var inner = root.select("g");
   var zoom = d3.behavior.zoom().on("zoom", function() {
