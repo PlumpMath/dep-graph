@@ -23,7 +23,6 @@
                (rest nds)))
       colors)))
 
-;; Should replace with tools.namespace
 (defn depgraph
   "Generate a namespace dependency graph as svg file"
   [project]
@@ -42,10 +41,9 @@
                 (mapcat #(->> (filter part-of-project?
                                 (ns-dep/immediate-dependencies dep-graph %))
                            (map (partial vector %)))))
+        ;; comp reverse vector
         idx (into {} (map-indexed (fn [i n] [n i]) nodes))
         json-nodes (mapv (fn [[n i]] {:name (str n)}) (sort-by second idx))
-        json-edges (->> edges 
-                     (map (fn [[from to]]
-                            {:source from :target to})))]
+        json-edges (map (fn [[from to]] {:source from :target to}) edges)]
     (with-open [^java.io.Writer w (io/writer (io/file json-file))]
       (json/write {:edges json-edges :nodes json-nodes} w))))
