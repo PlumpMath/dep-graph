@@ -26,14 +26,16 @@
 (defn depgraph
   "Generate a namespace dependency graph as svg file"
   [project]
-  (let [json-file (str (:name project) ".json")
-        source-files (apply set/union
-                       (map (comp ns-find/find-clojure-sources-in-dir io/file)
-                         (project :source-paths)))
-        tracker (ns-file/add-files {} source-files)
+  (let [json-file (io/file (get-in project [:deps :to])
+                    (str (:name project) ".json"))
+        exts (update ns-find/clj :extensions (partial cons ".cljs"))
+        source-fs (apply set/union
+                    (->> (project :source-paths)
+                      (map (comp #(ns-find/find-sources-in-dir % exts)
+                             io/file))))
+        tracker (ns-file/add-files {} source-fs)
         dep-graph (tracker ::ns-track/deps)
-        ns-names (set (map (comp second ns-file/read-file-ns-decl)
-                        source-files))
+        ns-names (set (map (comp second ns-file/read-file-ns-decl) source-fs))
         part-of-project? (partial contains? ns-names)
         nodes (filter part-of-project? (reverse (ns-dep/topo-sort dep-graph)))
         colors (nodes->colors nodes)
@@ -45,5 +47,6 @@
         idx (into {} (map-indexed (fn [i n] [n i]) nodes))
         json-nodes (mapv (fn [[n i]] {:name (str n)}) (sort-by second idx))
         json-edges (map (fn [[from to]] {:source from :target to}) edges)]
-    (with-open [^java.io.Writer w (io/writer (io/file json-file))]
-      (json/write {:edges json-edges :nodes json-nodes} w))))
+    (with-open [^java.io.Writer w (io/writer json-file)]
+      (json/write {:edges json-edges :nodes json-nodes} w))
+    json-file))
