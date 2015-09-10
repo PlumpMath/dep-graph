@@ -9,3 +9,7 @@ line {
 .edgePath {
   stroke: black;
 }
+
+body {
+  background: #f0f1eb;
+}
