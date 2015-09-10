@@ -3,8 +3,6 @@ goog.provide('deps.tree');
 goog.require('cljsjs.d3');
 goog.require('deps.search');
 
-// http://bl.ocks.org/mbostock/1138500
-
 deps.tree.config = {w: 1600, h: 1200,
                     rx: 60, ry: 30,
                     fill: d3.scale.category20()};
@@ -59,9 +57,17 @@ deps.tree.Graph = function(nsOpts, json) {
               nodeColors[group] = color;
               allColors.pop();
           }
-          g.setNode(node.name, {label: node.name});
-          var hgStyle = (deps.search.isSearched(highlightNs, node.name)) ? "fill:black" : "";
-          g.node(node.name).style = "fill:#" + color + ";stroke:black;" + hgStyle;
+
+          var hgStyle = "";
+          var labelStyle = "";
+          if (deps.search.isSearched(highlightNs, node.name)) {
+              labelStyle = "fill:#f0f1eb";
+              hgStyle = "fill:black;";
+          } 
+          g.setNode(node.name, {label: node.name,
+                                labelStyle: labelStyle, 
+                                style: "fill:#" + color + ";stroke:black;" + hgStyle});
+
       };
    });
    json.edges.forEach(function(edge) {
