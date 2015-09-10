@@ -11,7 +11,8 @@
 
 ;; define your app data so that it doesn't get over-written on reload
 
-(defonce app-state (atom {:ns ""}))
+(defonce app-state (atom {:ns ""
+                          :highlight ""}))
 
 (def d3 (.-d3 js/window))
 
@@ -19,7 +20,9 @@
   (.json d3 "Komunike.json"
     (fn [json]
       (tree/drawTree "#graph"
-        (clj->js (str/split (:ns data) " "))
+        (clj->js
+          {:ns (str/split (:ns data) " ")
+           :highlight (str/split (:highlight data) " ")})
         json))))
 
 (om/root
@@ -42,12 +45,12 @@
           (dom/span #js {}
             "highlight ns: "
             (dom/input #js {:type "text"
-                            :value (:hg data)
+                            :value (:highlight data)
                             :onKeyDown (fn [e]
                                          (when (= "Enter" (.-key e))
                                            (draw! data)))
                             :onChange (fn [e]
-                                        (om/update! data :ns
+                                        (om/update! data :highlight
                                           (.. e -target -value)))}))
           (dom/svg #js {:id "graph"}
             (dom/g #js {}))))

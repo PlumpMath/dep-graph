@@ -1,6 +1,7 @@
 goog.provide('deps.tree');
 
 goog.require('cljsjs.d3');
+goog.require('deps.search');
 
 // http://bl.ocks.org/mbostock/1138500
 
@@ -29,7 +30,8 @@ deps.tree.nodeToGroup = function(name) {
     return name.split("\.")[0];
 };
 
-deps.tree.Graph = function(removeNs, json) {
+deps.tree.Graph = function(nsOpts, json) {
+   var removeNs = nsOpts.ns;
    var shouldKeep = function (name) {
        var keep = true;
        removeNs.forEach(function(ns) {
@@ -39,7 +41,11 @@ deps.tree.Graph = function(removeNs, json) {
        });
        return keep;
    };
+    
    var g = new dagreD3.graphlib.Graph().setGraph({}); 
+
+   var highlightNs = nsOpts.highlight;
+
    var allColors = deps.tree.colors.slice(0);
    var nodeColors = {};
    json.nodes.forEach(function(node) {
@@ -54,7 +60,8 @@ deps.tree.Graph = function(removeNs, json) {
               allColors.pop();
           }
           g.setNode(node.name, {label: node.name});
-          g.node(node.name).style = "fill:#" + color + ";stroke:black";
+          var hgStyle = (deps.search.isSearched(highlightNs, node.name)) ? "fill:black" : "";
+          g.node(node.name).style = "fill:#" + color + ";stroke:black;" + hgStyle;
       };
    });
    json.edges.forEach(function(edge) {
@@ -70,8 +77,8 @@ deps.tree.Graph = function(removeNs, json) {
    return g;
 };
 
-deps.tree.drawTree = function(nodeId, removeNs, json) {
-  var g = deps.tree.Graph(removeNs, json);
+deps.tree.drawTree = function(nodeId, nsOpts, json) {
+  var g = deps.tree.Graph(nsOpts, json);
   var root = deps.tree.svg(nodeId);
   var inner = root.select("g");
   var zoom = d3.behavior.zoom().on("zoom", function() {
