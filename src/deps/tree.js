@@ -24,7 +24,7 @@ deps.tree.formatNs = function(s) {
     return s.split(".").join("\n");
 };
 
-deps.tree.colors = palette('tol',12); 
+deps.tree.colors = palette('tol',11); 
 
 deps.tree.nodeToGroup = function(name) {
     return name.split("\.")[0];

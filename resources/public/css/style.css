@@ -13,3 +13,11 @@ line {
 body {
   background: #f0f1eb;
 }
+
+.controls {
+  font-size: xx-large;
+}
+
+input {
+  font-size: xx-large;
+}

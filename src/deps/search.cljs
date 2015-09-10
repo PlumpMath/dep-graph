@@ -43,8 +43,8 @@
                    "model.state",
                    "model.record",
                    "common.types",
-                   "field.uti",
-                   "field.util.mult"}
+                   "field.muti",
+                   "field.util.multi"}
    "FIX" #{"server.handler",
            "server.log",
            "auth.db",

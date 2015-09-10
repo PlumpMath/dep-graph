@@ -31,7 +31,7 @@
       om/IRender
       (render [_]
         (dom/div nil
-          (dom/span #js {}
+          (dom/span #js {:className "controls"}
             "filter ns: "
             (dom/input #js {:type "text"
                             :value (:ns data)
@@ -42,7 +42,7 @@
                                         (om/update! data :ns
                                           (.. e -target -value)))}))
           (dom/br #js {})
-          (dom/span #js {}
+          (dom/span #js {:className "controls"}
             "highlight ns: "
             (dom/input #js {:type "text"
                             :value (:highlight data)
